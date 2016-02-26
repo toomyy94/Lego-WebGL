@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	
+<!--
+
+3D Projections.
+
+Lego Project.
+
+Tomás Rodrigues - November 2015
+Hao Chen
+
+-->
+	
+<title>WebGL example 27 &mdash; 3D Projections</title>
+
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+<!--
+
+The simple vertex and fragment shaders.
+
+Using a vertex coordinate buffer and a vertex colour buffer.
+
+Passing the Model-View Matrix and the Projection Matrix. 
+
+-->
+
+<script id="shader-vs" type="x-shader/x-vertex">
+	
+    attribute vec3 aVertexPosition;
+
+    attribute vec3 aVertexColor;
+    
+    uniform mat4 uMVMatrix;
+
+    uniform mat4 uPMatrix;
+
+    varying vec4 vertexColor;
+    
+    void main(void) {
+		
+		// To allow seeing the points drawn
+		
+		gl_PointSize = 5.0;
+		
+		// Just converting the (x,y,z) vertices to Homogeneous Coord.
+		
+		// And multiplying by the Projection and the Model-View matrix
+		
+        gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+        
+        // Converting the RGB color value to RGBA
+        
+        vertexColor = vec4(aVertexColor, 1.0);
+    }
+</script>
+
+<script id="shader-fs" type="x-shader/x-fragment">
+
+	precision mediump float;
+	
+	varying vec4 vertexColor;
+	
+	void main(void) {
+		
+		// Using the passed vertex color
+		
+		gl_FragColor = vertexColor;
+	}
+
+</script>
+
+<!-- The JS files -->
+
+ <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
+integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Some useful functions for browser compatibility -->
+
+<script type="text/javascript" src="webgl-utils.js"></script>
+
+<!-- Handling vectors and matrices -->
+
+<script type="text/javascript" src="maths.js"></script>
+
+<!-- WebGL code -->
+
+<script type="text/javascript" src="initShaders.js"></script>
+<script type="text/javascript" src="CubeSource.js"></script>
+<script type="text/javascript" src="ProjetoCV-2015.js"></script>
+
+</head>
+
+<body background="./lego3.jpg" onload="runWebGL();">
+
+	<div style="text-align: center">
+		
+		<h1> Lego project - Tomas Rodrigues & Hao Chen</h1>
+		Press an Image to create a Lego Piece, Press the Arrow keys to move the Lego.
+		<p>
+	
+		<div style="float:right; width:55%;">
+		<canvas id="my-canvas" style="border:2px solid #000000;" width="500" height="500"></canvas>
+		
+		</div>
+		<p> 
+		
+		<div style="float:left; width:40%;">
+
+		<p>
+			<b>CREATE LEGOS</b>
+		</p>
+		<p>
+		<Image width="100" id="Create_Cube" src="cube1x1.png" ></image>
+		<Image width="100" id="Create_Cube2x1" src="cube2x1.png" ></image>
+		<Image width="100" id="Create_Cube3x1"src="cube3x1.png" ></image>
+		<Image width="100" id="Create_Cube2x2"src="cube2x2.png" ></image>
+	
+		<br>
+		<button id="Create_CubeButton" >Create Cube 1x1</button>
+		<button id="Create_Cube2x1Button">Create Cube 2x1</button>
+		<button id="Create_Cube3x1Button">Create Cube 3x1</button>
+		<button id="Create_Cube2x2Button">Create Cube 2x2</button>
+		
+	
+		<br>
+		<p>
+			<b>ROTATE LEGO</b>
+		</p>
+
+		<p>
+	    <!-- <button id="rotate-button">Rotate</button> -->
+	    <Image width="60" id="rotate-button" src="rotate.jpg" ></image>
+	   
+		</p>
+		</p>
+
+		<br>
+		<p>
+			<b>CHOOSE LEGO COLORS</b>
+		</p>
+
+		<p>
+			<Image width="60" id="green-button" src="green.png" ></image>
+			<Image width="60" id="red-button" src="red.png" ></image>
+			<Image width="60" id="blue-button" src="blue.png" ></image>
+			<Image width="60" id="pink-button" src="pink.png" ></image>
+			<Image width="60" id="orange-button" src="orange.jpg" ></image>
+		
+
+		</p>
+
+	
+		<br>
+		<p>Choose the <b>projection type</b>:
+		
+        <select id="projection-selection">
+			<option value="0">Orthogonal Projection</option>
+			<option value="1">Perspective Projection</option>
+        </select>
+        
+        </p>
+        
+                
+		<p>
+		
+		<Image width="60" id="reset-button" src="restart.png" ></image>
+		
+		<Image width="60" id="delete-button" src="delete.jpg" ></image>
+				
+		</p>
+				</div>
+	</div>
+
+</body>
+
+</html>
